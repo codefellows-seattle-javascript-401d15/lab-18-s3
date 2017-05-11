@@ -8,11 +8,14 @@ const del = require('del');
 const AWS = require('aws-sdk');
 const dataDir = `${__dirname}/../data`; 
 const debug = require('debug')('cfgram:pic-routes');
+const multer = require('multer');  
+const upload = multer({dest: dataDir});  
+
 
 const Pic = require('../models/pic.js');
 const Gallery = require('../models/gallery.js');
 
-AWS.config.setPromiseDependency(require('bluebird'));
+AWS.config.setPromisesDependency(require('bluebird'));
 
 module.exports = exports = {};
 

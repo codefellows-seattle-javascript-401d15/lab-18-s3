@@ -17,6 +17,7 @@ module.exports = function(router) {
     .catch(err => {
       console.log(err);
       res.status(err.status).send(err.message);
+    });  
   });
   
   router.put('/gallery/:id', bearerAuth, (req, res) => {

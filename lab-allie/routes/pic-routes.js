@@ -3,9 +3,9 @@
 const picCtrl = require('../controller/pic-controller.js');
 const debug = require('debug')('cfgram:pic-routes');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
-const upload = multer({dest: dataDir});  
-const dataDir = `${__dirname}/../data`; 
 const multer = require('multer');  
+const dataDir = `${__dirname}/../data`; 
+const upload = multer({dest: dataDir});  
 
 module.exports = function(router) {
   router.post('/gallery/:id/pic', bearerAuth, upload.single('image'), (req, res) => {
