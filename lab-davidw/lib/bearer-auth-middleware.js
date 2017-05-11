@@ -2,12 +2,12 @@
 
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
-const debug = require('debug');
+const debug = require('debug')('cfgram:bearer-auth-middleware');
 
 const User = require('../models/user');
 
 module.exports = function(req, res, next) {
-  debug('#bearer-auth-middleware');
+  debug('bearer-auth-middleware');
 
   let authHeaders = req.headers.authorization;
   if(!authHeaders) return next(createError(401, 'Authorization headers required'));

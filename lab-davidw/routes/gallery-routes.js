@@ -1,6 +1,7 @@
 'use strict';
 
 const galleryCtrl = require('../controllers/gallery-controller');
+const createError = require('http-errors');
 const debug = require('debug')('cfgram:gallery-routes');
 const bearerAuth = require('../lib/bearer-auth-middleware');
 
@@ -8,7 +9,9 @@ module.exports = function(router) {
 
   router.post('/gallery', bearerAuth, (req, res) => {
     debug('#POST /api/gallery');
-    galleryCtrl.createGallery(req, res, req.body, req.user._id);
+    galleryCtrl.createGallery(req)
+    .then(gallery => res.json(gallery))
+    .catch((err) => res.status(err.status).send(err.message));
 
   });
 

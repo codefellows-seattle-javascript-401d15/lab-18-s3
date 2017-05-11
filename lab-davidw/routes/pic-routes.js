@@ -8,9 +8,8 @@ const bearerAuth = require('../lib/bearer-auth-middleware');
 
 const picCtrl = require('../controllers/pic-controller');
 
-// AWS.config.setPromisesDependency(require('bluebird'));
-
 module.exports = function(router) {
+  
   router.post('/gallery/:id/pic', bearerAuth, upload.single('image'), (req, res) => {
     debug('#POST /gallery/:id/pic');
     picCtrl.addPicToS3(req, res)

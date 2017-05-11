@@ -11,6 +11,7 @@ module.exports = function(router) {
     userCtrl.createUser(req)
     .then((token) => res.json(token))
     .catch((err) => res.status(err.status).send(err.message));
+    
   });
 
   router.get('/signin', basicAuth, (req, res) => {

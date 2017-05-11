@@ -7,18 +7,17 @@ const debug = require('debug')('cfgram:gallery-controller');
 
 module.exports = exports = {};
 
-exports.createGallery = function(req, res, gallery, userId) {
+exports.createGallery = function(req) {
   debug('#createGallery');
-  console.log(res.body);
+  console.log('BODY: ', req.body);
+  console.log('USER?!: ', req.user);
 
-  if(!gallery) return Promise.reject(createError(400, 'Bad request'));
+  if(!req) return Promise.reject(createError(400, 'Bad request'));
 
-  gallery.userId = userId;
-  new Gallery(gallery).save()
-  .then(gallery => res.json(gallery))
-  .catch(err => {
-    console.log(err);
-  });
+  req.body.userId = req.user._id;
+  return new Gallery(req.body).save()
+  .then(gallery => gallery)
+  .catch(err => createError(401, err.message));
 };
 
 exports.fetchGallery = function(req, res, id, userId) {
