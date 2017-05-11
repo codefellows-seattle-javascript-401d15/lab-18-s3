@@ -7,6 +7,7 @@ const Gallery = require('../models/gallery');
 module.exports = exports = {};
 
 exports.createGallery = function(req, res, gallery, userId) {
+  console.log(res.body);
 
   if(!gallery) return Promise.reject(createError(400, 'Bad request'));
 
