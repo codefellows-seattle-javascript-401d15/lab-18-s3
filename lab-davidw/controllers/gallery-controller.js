@@ -3,10 +3,12 @@
 const Promise = require('bluebird');
 const createError = require('http-errors');
 const Gallery = require('../models/gallery');
+const debug = ('debug')('cfgram:gallery-controller');
 
 module.exports = exports = {};
 
 exports.createGallery = function(req, res, gallery, userId) {
+  debug('#createGallery');
   console.log(res.body);
 
   if(!gallery) return Promise.reject(createError(400, 'Bad request'));
@@ -33,7 +35,7 @@ exports.fetchGallery = function(req, res, id, userId) {
   .catch(err => res.status(err.status).send(err.message));
 };
 
-exports.deleteGallery = function(rreq, res, id, userId) {
+exports.deleteGallery = function(res, id, userId) {
 
   if(!id) return Promise.reject(createError(400, 'bad request'));
 
