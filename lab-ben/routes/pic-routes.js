@@ -10,7 +10,6 @@ const createError = require('http-errors');
 const debug = require('debug')('cfgram:pic-routes');
 const bearerAuth = require('../lib/bearer-auth-middleware');
 
-const Pic = require('../models/pic.js');
 const Gallery = require('../models/gallery.js');
 const picCtrl = require('../controllers/pic-controller.js');
 
