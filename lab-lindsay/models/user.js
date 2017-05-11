@@ -55,11 +55,11 @@ userSchema.methods.generateFindHash = function() {
         if(tries > 3) return reject(createError(401, 'generate findhash failed'));
         tries++;
         _generatefindHash();
-      })
-    }
+      });
+    };
 
     _generatefindHash();
-  })
+  });
 };
 
 userSchema.methods.generateToken =function() {
@@ -71,8 +71,8 @@ userSchema.methods.generateToken =function() {
     .catch(err => {
       console.log(err);
       reject(createError(401, 'generate token failed'));
-    })
-  })
-}
+    });
+  });
+};
 
 module.exports = mongoose.model('user', userSchema);
