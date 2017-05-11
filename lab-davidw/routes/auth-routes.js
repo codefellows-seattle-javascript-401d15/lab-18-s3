@@ -15,9 +15,8 @@ module.exports = function(router) {
 
   router.get('/signin', basicAuth, (req, res) => {
     debug('#GET /signin');
-
     userCtrl.fetchUser(res, req.auth);
-    
+
   });
 
   return router;
