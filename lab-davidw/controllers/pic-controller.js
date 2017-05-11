@@ -23,45 +23,44 @@ function s3UploadProm(params) {
   });
 }
 
-
 module.exports = exports = {};
 
-exports.addPicToS3 = function(req, res) {
+exports.addPicToS3 = function(pic) {
+  console.log(pic);
+  if(!pic.file) return createError(400, 'Resource required');
+  if(!pic.file.path) return createError(500, 'File not saved');
 
-  if(!req.file) return createError(400, 'Resource required');
-  if(!req.file.path) return createError(500, 'File not saved');
-
-  let ext = path.extname(req.file.originalname);
+  let ext = path.extname(pic.file.originalname);
   let params = {
     ACL: 'public-read',
     Bucket: process.env.AWS_BUCKET,
-    Key: `${req.file.filename}${ext}`,
-    Body: fs.createReadStream(req.file.path),
+    Key: `${pic.file.filename}${ext}`,
+    Body: fs.createReadStream(pic.file.path),
   };
 
-  return Gallery.findById(req.params.id)
+  return Gallery.findById(pic.params.id)
   .then(() => s3UploadProm(params))
   .then(s3Data => {
     del([`${dataDir}/*`]);
     let picData = {
-      name: req.body.name,
-      desc: req.body.desc,
-      userId: req.body._id,
-      galleryID: req.params.id,
+      name: pic.body.name,
+      desc: pic.body.desc,
+      userId: pic.body._id,
+      galleryID: pic.params.id,
       imageURI: s3Data.Location,
       objectKey: s3Data.Key,
     };
     return new Pic(picData).save();
   })
-  .then(pic => res.json(pic))
-  .catch(err => res.send(err));
+  .then(pic => Promise.resolve(pic))
+  .catch(err => createError(404, err.message));
 };
 
-exports.fetchPic = function(req, res) {
+exports.fetchPic = function(req) {
   console.log('Here is the auth: ', req.auth);
   if(!req.auth) return Promise.reject(createError(404, 'No Authorization found'));
 };
 
-exports.removePicFromS3 = function(req, res) {
+exports.removePicFromS3 = function(req) {
   if(!req._id) return Promise.reject(createError(400, 'Id is required'));
 };

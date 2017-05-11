@@ -3,7 +3,7 @@
 const Promise = require('bluebird');
 const createError = require('http-errors');
 const Gallery = require('../models/gallery');
-const debug = ('debug')('cfgram:gallery-controller');
+const debug = require('debug')('cfgram:gallery-controller');
 
 module.exports = exports = {};
 
@@ -22,7 +22,7 @@ exports.createGallery = function(req, res, gallery, userId) {
 };
 
 exports.fetchGallery = function(req, res, id, userId) {
-
+  debug('#fetchGallery');
   if(!id) return Promise.reject(createError(400, 'Bad request'));
 
   Gallery.findById(id)
@@ -36,7 +36,7 @@ exports.fetchGallery = function(req, res, id, userId) {
 };
 
 exports.deleteGallery = function(res, id, userId) {
-
+  debug('deleteGallery');
   if(!id) return Promise.reject(createError(400, 'bad request'));
 
   Gallery.findById(id)
@@ -56,7 +56,7 @@ exports.deleteGallery = function(res, id, userId) {
 };
 
 exports.updateGallery = function(req, res, id, userId, gallery) {
-
+  debug('#updateGallery');
   if(!id) return Promise.reject(createError(404, 'Not found'));
 
   Gallery.findByIdAndUpdate(id, gallery, {new: true})

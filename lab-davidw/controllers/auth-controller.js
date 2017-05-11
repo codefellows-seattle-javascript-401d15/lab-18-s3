@@ -6,8 +6,8 @@ const User = require('../models/user');
 
 module.exports = exports = {};
 
-exports.createUser = function(req, res) {
-
+exports.createUser = function(req) {
+  console.log('Here the req is: ', req.body);
   if(!req) return Promise.reject(createError(400, 'Bad request'));
 
   let tempPassword = req.body.password;
@@ -19,18 +19,16 @@ exports.createUser = function(req, res) {
   return newUser.generatePasswordHash(tempPassword)
   .then(user => user.save())
   .then(user => user.generateToken())
-  .then(token => res.json(token))
-  .catch(err => {
-    res.send(err);
-  });
+  .then(token => token)
+  .catch(err => createError(401, err.message));
 };
 
-exports.fetchUser = function(res, reqAuth) {
+exports.fetchUser = function(reqAuth) {
   if(!reqAuth) return Promise.reject(createError(404, 'Not found'));
 
   return User.findOne({username: reqAuth.username})
   .then(user => user.comparePasswordHash(reqAuth.password))
   .then(user => user.generateToken())
-  .then(data => res.json(data))
-  .catch(err => Promise.reject(err));
+  .then(data => data)
+  .catch(err => createError(401, err.message));
 };

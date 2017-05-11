@@ -8,15 +8,16 @@ module.exports = function(router) {
 
   router.post('/signup', (req, res) => {
     debug('#POST /signup');
-    userCtrl.createUser(req, res)
-    .then((user) => res.send(user))
-    .catch((err) => res.send(err.message));
+    userCtrl.createUser(req)
+    .then((token) => res.json(token))
+    .catch((err) => res.status(err.status).send(err.message));
   });
 
   router.get('/signin', basicAuth, (req, res) => {
     debug('#GET /signin');
-    userCtrl.fetchUser(res, req.auth);
-
+    userCtrl.fetchUser(req.auth)
+    .then((data) => res.json(data))
+    .catch((err) => res.status(err.status).send(err.message));
   });
 
   return router;
