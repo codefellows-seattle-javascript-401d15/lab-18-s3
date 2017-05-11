@@ -12,51 +12,15 @@ const debug = require('debug')('cfgram:pic-routes');
 const bearerAuth = require('../lib/bearer-auth-middleware');
 const Pic = require('../models/pic');
 const Gallery = require('../models/gallery');
+const picController = require('../controllers/pic-controller');
 
 AWS.config.setPromisesDependency(require('bluebird'));
 
-const s3 = new AWS.s3();
-
-function s3UploadProm(params) {
-  return new Promise((resolve, reject) => {
-    s3.upload(params, (err,data) => {
-      resolve(data);
-    });
-  });
-}
-
 module.exports = function(router) {
+  
   router.post('/gallery/:id/pic', bearerAuth, upload.single('image'), (req, res) => {
     debug('#POST /gallery/:id/pic');
-
-    if(!req.file) return createError(400, 'Resource required');
-    if(!req.file.path) return createError(500, 'File not saved');
-
-    let ext = path.extname(req.file.originalname);
-    let params = {
-      ACL: 'public-read',
-      Bucket: process.env.AWK_BUCKET,
-      Key: `${req.file.filename}${ext}`,
-      Body: fs.createReadStream(req.file.path),
-
-    };
-
-    return Gallery.findById(req.params.id)
-    .then( () => s3UploadProm(params))
-    .then(s3Data => {
-      del([`${dataDir}/*`]);
-      let picData = {
-        name: req.body.name,
-        desc: req.body.desc,
-        userID: req.user._id,
-        galleryID: req.params.id,
-        imageURI: s3Data.Location,
-        objectKey: s3Data.Key,
-      };
-      return new Pic(picData).save();
-
-    })
-
+    picController.createItem(req)
     .then(pic => res.json(pic))
     .catch(err => res.send(err));
   });

@@ -9,6 +9,7 @@ const Promise = require('bluebird');
 const errorHandler = require('./lib/error-middleware');
 const authRoutes = require('./routes/auth-routes');
 const galleryRoutes = require('./routes/gallery-routes');
+const picRoutes = require('./routes/pic-routes');
 const bodyParser = require('body-parser').json();
 const mongoose = require('mongoose');
 
@@ -25,5 +26,6 @@ app.use(cors());
 app.use(bodyParser);
 app.use('/api', authRoutes(router));
 app.use('/api', galleryRoutes(router));
+app.use('/api', picRoutes(router));
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
