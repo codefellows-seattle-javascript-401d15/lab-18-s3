@@ -12,7 +12,7 @@ module.exports = function(router) {
     debug('#POST /pic/:id');
     picCtrl.uploadPic(req)
     .then(pic => res.json(pic))
-    .catch(err => res.send(err));
+    .catch(err => res.send(err)); ///res.status, res.send 
   });
   
   router.get('/pic/:id', bearerAuth, (req, res) => {

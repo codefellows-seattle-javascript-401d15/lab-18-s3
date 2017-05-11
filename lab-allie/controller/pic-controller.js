@@ -24,6 +24,7 @@ const s3 = new AWS.S3();
 function s3UploadProm(params) {  
   return new Promise((resolve, reject) => {
     s3.upload(params, (err, data) => {
+      console.log(err);
       resolve(data);
     });
   });
@@ -43,19 +44,22 @@ exports.uploadPic = function(req) {
     Key: `${req.file.filename}${ext}`,
     Body: fs.createReadStream(req.file.path),
   };
-  
   return Gallery.findById(req.params.id)
   .then(() => s3UploadProm(params))
   .then(s3Data => {
+    console.log('s3Data', s3Data);
+
     del([`${dataDir}/*`]);
     let picData = {
       name: req.body.name,
-      desc: req.body.desc,
+      description: req.body.description,
       userID: req.user._id,
       galleryID: req.params.id,
       imageURI: s3Data.Location,
       objectKey: s3Data.Key,
     };
     return new Pic(picData).save();
-  });
+  })
+  .then(pic => pic)
+  .catch(err => Promise.reject(err));
 };
