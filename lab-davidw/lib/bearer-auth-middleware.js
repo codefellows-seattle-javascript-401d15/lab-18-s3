@@ -18,6 +18,7 @@ module.exports = function(req, res, next) {
   jwt.verify(token, process.env.APP_SECRET, (err, decoded) => {
     if(err) return next(err);
 
+    console.log('HERE IS TOKEN', token);
     User.find({findHash: decoded.token})
     .then(user => {
       req.user = user[0];

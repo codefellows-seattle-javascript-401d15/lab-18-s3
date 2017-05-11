@@ -9,6 +9,7 @@ module.exports = function(router) {
 
   router.post('/gallery', bearerAuth, (req, res) => {
     debug('#POST /api/gallery');
+    console.log(req.user);
     galleryCtrl.createGallery(req)
     .then(gallery => res.json(gallery))
     .catch((err) => res.status(err.status).send(err.message));
