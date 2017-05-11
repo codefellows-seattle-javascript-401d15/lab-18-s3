@@ -4,7 +4,6 @@ const Promise = require('bluebird');
 const createError = require('http-errors');
 const Gallery = require('../models/gallery');
 const Pic = require('../models/pic');
-
 const fs = require('fs');
 const del = require('del');
 const path = require('path');
@@ -44,12 +43,12 @@ exports.createItem = function(req) {
     let picData = {
       name: req.body.name,
       desc: req.body.desc,
-      userID: req.user._id,
-      galleryID: req.params.id,
+      userId: req.user._id,
+      galleryId: req.params.id,
       imageURI: s3Data.Location,
       objectKey: s3Data.Key,
     };
-    return new Pic(picData).save();
 
-  })
+    return new Pic(picData).save();
+  });
 };

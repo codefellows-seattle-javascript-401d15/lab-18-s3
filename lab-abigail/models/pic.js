@@ -7,7 +7,7 @@ const picSchema = Schema({
   name: {type: String, required: true},
   desc: {type: String, required: true},
   userId: {type: Schema.Types.Objectd, required: true},
-  galleryId: {type: String, required: true, unique: true},
+  galleryId: {type: Schema.Types.Objectd, required: true},
   imageURI: {type: String, required: true, unique: true},
   objectKey: {type: String, required: true, unique: true},
   created: {type: Date, required: true, default: Date.now},
