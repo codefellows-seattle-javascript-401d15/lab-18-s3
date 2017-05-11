@@ -8,8 +8,6 @@ const del = require('del');
 const AWS = require('aws-sdk');
 const dataDir = `${__dirname}/../data`; 
 const debug = require('debug')('cfgram:pic-routes');
-const multer = require('multer');  
-const upload = multer({dest: dataDir});  
 
 
 const Pic = require('../models/pic.js');
@@ -27,7 +25,8 @@ function s3UploadProm(params) {
       console.log(err);
       resolve(data);
     });
-  });
+  })
+  .catch(err => Promise.reject(err));
 }
 
 exports.uploadPic = function(req) {
@@ -63,3 +62,47 @@ exports.uploadPic = function(req) {
   .then(pic => pic)
   .catch(err => Promise.reject(err));
 };
+
+exports.deletePic = function(picid) {
+  debug('#DELETE /gallery/:id/pic/:id');
+  console.log('req', picid);
+  // if(!req.file) return Promise.reject(createError(400, 'Resouce required'));
+  // if(!req.file.path) return Promise.reject(createError(500, 'File not saved'));
+  
+  // let ext = path.extname(req.file.originalname);
+  
+  return Pic.findByIdAndRemove(picid)
+  .then(pic => {
+    let params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: pic.objectKey,
+    };
+    return s3.deleteObject(params);
+  })
+  .catch(err => console.error(err))
+  .then(pic => {
+    Promise.resolve(pic);
+  });
+};
+
+
+// //from lab repo
+// var params = {
+//   Bucket: 's3-bucket-name',
+//   Key: 'object-filename'
+// }
+// s3.deleteObject(params)
+// 
+// 
+// //from amazon
+// var params = {
+//   Bucket: 'STRING_VALUE', /* required */
+//   Key: 'STRING_VALUE', /* required */
+//   MFA: 'STRING_VALUE',
+//   RequestPayer: requester,
+//   VersionId: 'STRING_VALUE'
+// };
+// s3.deleteObject(params, function(err, data) {
+//   if (err) console.log(err, err.stack); // an error occurred
+//   else     console.log(data);           // successful response
+// });

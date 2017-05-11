@@ -15,14 +15,16 @@ module.exports = function(router) {
     .catch(err => res.send(err)); ///res.status, res.send 
   });
   
-  router.get('/pic/:id', bearerAuth, (req, res) => {
-    debug('#GET /pic/:id');
-    
-  });
+  // router.get('/pic/:id', bearerAuth, (req, res) => {
+  //   debug('#GET /pic/:id');
+  //   
+  // });
   
-  router.delete('/pic/:id', bearerAuth, (req, res) => {
+  router.delete('/gallery/:galleryid/pic/:picid', bearerAuth, (req, res) => {
     debug('#DELETE /pic/:id');
-
+    picCtrl.deletePic(req.params.picid)
+    .then(err => res.status(204).send(err.message))
+    .catch(err => res.send(err));
   });
   
   return router;
