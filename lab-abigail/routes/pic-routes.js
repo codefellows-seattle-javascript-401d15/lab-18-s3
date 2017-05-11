@@ -8,14 +8,15 @@ const debug = require('debug')('cfgram:pic-routes');
 const bearerAuth = require('../lib/bearer-auth-middleware');
 const picController = require('../controllers/pic-controller');
 
-AWS.config.setPromisesDependency(require('bluebird'));
-
 module.exports = function(router) {
 
-  router.post('/gallery/:id/pic', bearerAuth, upload.single('image'), (req, res) => {
+  router.post('/gallery/:id/pic', bearerAuth, upload.single('pic'), (req, res) => {
     debug('#POST /gallery/:id/pic');
     picController.createItem(req)
-    .then(pic => res.json(pic))
+    .then(pic => {
+      console.log(pic);
+      return res.json(pic);
+    })
     .catch(err => res.send(err));
   });
 
