@@ -9,7 +9,7 @@ module.exports = exports = {};
 exports.addGallery = function(req) {
   debug('gallery-controller addGallery');
 
-  req.body.userId = req.user_id;
+  req.body.userId = req.user._id;
   return new Gallery(req.body).save();
 };
 
