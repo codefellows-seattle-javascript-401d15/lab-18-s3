@@ -10,7 +10,7 @@ module.exports = function(router) {
     .then(token => {
       res.json(token);
     })
-    .catch(err => createError(404, err.message));
+    .catch(err => res.status(err.status).send(err.message));
   });
   
   router.get('/signin', basicAuth, (req, res) => {
