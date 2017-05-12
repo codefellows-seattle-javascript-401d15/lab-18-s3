@@ -26,7 +26,7 @@ const testGallery = {
 
 mongoose.Promise = Promise;
 
-describe.only('Picture routes', function() {
+describe('Picture routes', function() {
   before(done => {
     new User(testUser)
     .generatePasswordHash(testUser.password)
@@ -54,7 +54,6 @@ describe.only('Picture routes', function() {
     .catch(() => done());
   });
   
-  console.log('temp gallery', this.tempGallery);
   afterEach(done => {
     Promise.all([
       User.remove({}),
@@ -81,7 +80,7 @@ describe.only('Picture routes', function() {
   
   describe('DELETE test', function() {
     it('should remove the photo', done => {
-      request.delete()
+      request.delete();
       done();
     });
   });

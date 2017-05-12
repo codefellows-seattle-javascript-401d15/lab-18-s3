@@ -1,6 +1,5 @@
 'use strict';
 
-const createError = require('http-errors');
 const userCtrl = require('../controller/user-controller.js');
 const basicAuth = require('../lib/basic-auth-middleware.js');
 

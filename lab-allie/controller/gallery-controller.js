@@ -7,7 +7,6 @@ const Gallery = require('../models/gallery.js');
 module.exports = exports = {};
 
 exports.addPicture = function(req) {
-  console.log('Scott was here', req.body);
   if(!req.body.name) return Promise.reject(createError(400, 'Invalid name property'));
   if(!req.body.desc) return Promise.reject(createError(400, 'Invalid desc property'));
   req.body.userId = req.user._id;
