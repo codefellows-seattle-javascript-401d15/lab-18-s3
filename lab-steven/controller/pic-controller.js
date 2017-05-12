@@ -20,7 +20,7 @@ const s3 = new AWS.S3();
 function s3UploadProm(params){
   return new Promise((resolve, reject) => {
     s3.upload(params, (err, data) => {
-      if (err) return reject(createError(err.status, err.message));
+      if (err) return reject(createError(err.status, err.name));
       return resolve(data);
     });
   });
@@ -29,7 +29,7 @@ function s3UploadProm(params){
 function s3DeleteProm(params){
   return new Promise((resolve, reject) => {
     s3.deleteObject(params, (err, data) => {
-      if (err) return reject(createError(err.status, err.message));
+      if (err) return reject(createError(err.status, err.name));
       return resolve(data);
     });
   });
@@ -64,7 +64,7 @@ exports.createPic = function(req){
     return new Pic(picData).save();
   })
   .then(pic => pic)
-  .catch(err => createError(err.status, err.message));
+  .catch(err => createError(err.status, err.name));
 };
 
 exports.fetchPic = function(reqUser, picId){
@@ -72,22 +72,21 @@ exports.fetchPic = function(reqUser, picId){
 
   return Pic.findById(picId)
   .then(pic => pic)
-  .catch(err => createError(err.status, err.message));
+  .catch(err => createError(err.status, err.name));
 };
 
 exports.deletePic = function(reqUser, picId){
   debug('#deletePic');
 
-  return Pic.find({_id: picId, userID: reqUser._id})
+  return Pic.find({ _id: picId, userID: reqUser._id})
   .then(pic => {
     if (pic === null) return Promise.reject(createError(404, 'Not found'));
     let params = {
       Bucket: process.env.AWS_BUCKET,
-      Key: pic.objectKey,
+      Key: pic[0].objectKey,
     };
     return s3DeleteProm(params);
   })
   .then(() => Pic.findOneAndRemove({_id: picId, userID: reqUser._id}))
-  .catch(err => createError(err.status, err.message));
-
+  .catch(err => createError(err.status, err.name));
 };
