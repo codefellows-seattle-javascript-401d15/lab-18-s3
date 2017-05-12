@@ -6,7 +6,9 @@ const User = require('../models/user.js');
 
 module.exports = exports = {};
 
-exports.signUp = function(req, res) {
+exports.signUp = function(req) {
+  if(!req.body.password) return Promise.reject(createError(400, 'Invalid password'));
+  
   let tempPassword = null;
   tempPassword = req.body.password;
   req.body.password = null;
@@ -18,16 +20,16 @@ exports.signUp = function(req, res) {
   .then(user => user.save())
   .then(user => {
     return user.generateToken();
-  })
-  .then(token => {
-    res.json(token);
-  })
-  .catch(err => createError(404, err.message));
+  });
 };
 
-exports.signIn = function(reqAuth, res) {
-  return User.findOne({username: reqAuth.username})
-  .then(user => user.comparePasswordHash(reqAuth.password))
+exports.signIn = function(req) {
+  if(!req.body.username) return Promise.reject(createError(400, 'Invalid username'));
+
+  if(!req.body.password) return Promise.reject(createError(400, 'Invalid password'));
+
+  return User.findOne({username: req.body.username})
+  .then(user => user.comparePasswordHash(req.body.password))
   .then(user => user.generateToken())
   .then(token => token)
   .catch(err => createError(404, err.message));

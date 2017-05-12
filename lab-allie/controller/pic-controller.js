@@ -32,8 +32,8 @@ function s3UploadProm(params) {
 exports.uploadPic = function(req) {
   debug('#POST /gallery/:id/pic');
   
-  if(!req.file) return createError(400, 'Resouce required');
-  if(!req.file.path) return createError(500, 'File not saved');
+  if(!req.file) return Promise.reject(createError(400, 'Resouce required'));
+  if(!req.file.path) return Promise.reject(createError(500, 'File not saved'));
   
   let ext = path.extname(req.file.originalname);
   
@@ -64,6 +64,8 @@ exports.uploadPic = function(req) {
 };
 
 exports.deletePic = function(picid) {
+  if(!picid) return Promise.reject(createError(400, 'Pic ID required'));
+  
   debug('#DELETE /gallery/:id/pic/:id');
   console.log('req', picid);
   // if(!req.file) return Promise.reject(createError(400, 'Resouce required'));

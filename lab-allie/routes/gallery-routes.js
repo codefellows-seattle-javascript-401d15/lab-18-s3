@@ -7,7 +7,9 @@ const debug = require('debug')('cfgram:user-model');
 module.exports = function(router) {
   router.post('/gallery', bearerAuth, (req, res) => {
     debug('#POST /api/gallery');
-    galleryCtrl.addPicture(req, res);
+    galleryCtrl.addPicture(req)
+    .then(gallery => res.json(gallery))
+    .catch(err => res.status(err.status).send(err.message));
   });
   
   router.get('/gallery/:id', bearerAuth, (req, res) => {
@@ -22,12 +24,16 @@ module.exports = function(router) {
   
   router.put('/gallery/:id', bearerAuth, (req, res) => {
     debug('#PUT /api/gallery/:id');
-    galleryCtrl.updatePicture(req);
+    galleryCtrl.updatePicture(req)
+    .then(pic => res.json(pic))
+    .catch(err => console.error(err));
   });
   
   router.delete('/gallery/:id', bearerAuth, (req, res) => {
     debug('#DELETE /api/gallery/:id');
-    galleryCtrl.deletePicture(req, res, req.params.id);
+    galleryCtrl.deletePicture(req, res, req.params.id)
+    .then(() => res.status(204).send())
+    .catch(err => res.send(err));
   });
   
   return router;
