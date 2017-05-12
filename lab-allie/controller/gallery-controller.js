@@ -12,7 +12,7 @@ exports.addPicture = function(req) {
   if(!req.body.desc) return Promise.reject(createError(400, 'Invalid desc property'));
   req.body.userId = req.user._id;
   
-  new Gallery(req.body).save()
+  return new Gallery(req.body).save()
   .then(gallery => gallery)
   .catch(err => Promise.reject(createError(400, err.message)));
 };
