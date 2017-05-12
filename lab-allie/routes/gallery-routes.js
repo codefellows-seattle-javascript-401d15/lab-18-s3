@@ -26,7 +26,7 @@ module.exports = function(router) {
     debug('#PUT /api/gallery/:id');
     galleryCtrl.updatePicture(req)
     .then(pic => res.json(pic))
-    .catch(err => console.error(err));
+    .catch(err => res.status(err.status).send(err.message));
   });
   
   router.delete('/gallery/:id', bearerAuth, (req, res) => {

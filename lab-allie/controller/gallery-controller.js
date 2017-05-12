@@ -17,27 +17,21 @@ exports.addPicture = function(req) {
   .catch(err => Promise.reject(createError(400, err.message)));
 };
 
-exports.getPicture = function(req, res, id, userId) {
-  if(!id) return Promise.reject(createError(400, 'ID required'));
+exports.getPicture = function(req) {
+  if(!req.params.id) return Promise.reject(createError(400, 'ID required'));
   
-  Gallery.findById(id)
-  .then(gallery => {
-    if(gallery.userId.toString() !== userId.toString()) {
-      return createError(401, 'Invalid user');
-    }
-    res.json(gallery);
-  })
+  return Gallery.findById(req.params.id)
   .catch(err => console.error(err));
 };
 
-exports.updatePicture = function(req, res, gallery, id) {
-  if(!gallery) return Promise.reject(createError(400, 'ID required'));
+exports.updatePicture = function(req) {
+  if(!req.params.id) return Promise.reject(createError(400, 'ID required'));
   
-  Gallery.findOneAndUpdate(id, req.body, {new: true});
+  return Gallery.findOneAndUpdate(req.params.id, req.body, {new: true});
 };
 
 exports.deletePicture = function(req, res, id) {
   if(!id) return Promise.reject(createError(400, 'ID required'));
 
-  Gallery.findByIdAndRemove(id);
+  return Gallery.findByIdAndRemove(id);
 };
