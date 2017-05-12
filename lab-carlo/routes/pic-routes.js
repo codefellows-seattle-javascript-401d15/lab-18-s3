@@ -1,13 +1,8 @@
 'use strict';
 
-//const fs = require('fs');
-//const del = require('del');
-//const path = require('path');
-//const AWS = require('aws-sdk');
 const multer = require('multer');
 const dataDir = `${__dirname}/../data`;
 const upload = multer({dest: dataDir});
-//const createError = require('http-errors');
 const debug = require('debug')('cfgram:pic-routes');
 const bearerAuth = require('../lib/bearer-auth-middleware');
 const picCntrl = require('../controller/pic-controller');

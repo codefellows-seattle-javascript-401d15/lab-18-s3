@@ -1,6 +1,4 @@
-//const Promise = require('bluebird');
 const Gallery = require('../model/gallery');
-//const createError = require('http-errors');
 
 
 module.exports = exports = {};

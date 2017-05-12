@@ -12,7 +12,6 @@ module.exports = function(req, res, next) {
   let authHeaders = req.headers.authorization;
   if(!authHeaders) return next(createError(401, 'Authorization headers required'));
 
-  // Bearer somerandomtoken => ['Bearer ', 'somerandomtoken']
   let token = authHeaders.split('Bearer ')[1];
   if(!token) return next(createError(401, 'Token required'));
 
