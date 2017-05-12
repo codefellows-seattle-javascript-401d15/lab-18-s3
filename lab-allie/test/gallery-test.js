@@ -8,7 +8,7 @@ const Promise = require('bluebird');
 const User = require('../models/user.js');
 const Gallery = require('../models/gallery.js');
 
-require('../server');
+require('../server.js');
 
 const url = `http://localhost:${process.env.PORT}`;
 
@@ -47,11 +47,9 @@ describe('Gallery routes', function() {
       .then(user => user.save())
       .then(user => {
         this.tempUser = user;
-        console.log('temporary user', this.tempUser);
         return user.generateToken();
       })
       .then(token => {
-        console.log('test token', token);
         this.tempToken = token;
         done();
       })

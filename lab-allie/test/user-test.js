@@ -12,8 +12,6 @@ const User = require('../models/user.js');
 const server = require('../server.js');
 chai.use(http);
 
-// const url = `http://localhost:${process.env.PORT}`;
-
 const testUser = {
   username: 'testy',
   password: 'abc123',
@@ -49,7 +47,6 @@ describe('User auth routes', function() {
       .post('/api/signup')
       .send(testUser)
       .end((err, res) => {
-        console.log('res.body', res.body);
         expect(res.status).to.equal(200);
         done();
       });
@@ -60,7 +57,6 @@ describe('User auth routes', function() {
       .post('/api/signup')
       .send('')
       .end((err, res) => {
-        console.log('res.body', res.body);
         expect(res.status).to.equal(400);
         done();
       });
