@@ -9,9 +9,6 @@ module.exports = exports = {};
 
 exports.createGallery = function(req) {
   debug('#createGallery');
-  console.log('BODY: ', req.body);
-  console.log('USER?!: ', req.user);
-
   if(!req) return Promise.reject(createError(400, 'Bad request'));
 
   req.body.userId = req.user._id;
@@ -45,7 +42,7 @@ exports.deleteGallery = function(res, id, userId) {
     }
     res.json(gallery);
   })
-  .catch(err => console.log(err));
+  .catch(err => res.status(err.status).send(err.message));
 
   Gallery.findByIdAndRemove(id)
   .then( () => {
@@ -65,5 +62,5 @@ exports.updateGallery = function(req, res, id, userId, gallery) {
     }
     res.json(gallery);
   })
-  .catch(err => console.log('update failed', err));
+  .catch(err => res.status(err.status).send(err.message));
 };
