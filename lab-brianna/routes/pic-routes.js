@@ -11,10 +11,10 @@ const dataDir = `${__dirname}/../data`;
 const upload = multer({dest: dataDir});
 const createError = require('http-errors');
 
-const Pic = require('../model/pic');
+const Pic = require('../models/pic');
 const Gallery = require('../models/gallery');
 
-AWS.config.setPromiseDependency(require('bluebird'));
+AWS.config.setPromisesDependency(require('bluebird'));
 const s3 = new AWS.S3();
 
 function s3UploadProm(params) {

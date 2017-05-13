@@ -10,6 +10,8 @@ const bodyParser = require('body-parser').json();
 const debug = require('debug')('cfgram:server');
 const errorHandler = require('./lib/error-middleware');
 const authRoutes = require('./routes/auth-routes');
+const picRoutes = require('./routes/pic-routes');
+const galleryRoutes = require('./routes/gallery-routes');
 
 const app = express();
 const router = express.Router();
@@ -23,5 +25,7 @@ app.use(errorHandler);
 app.use(cors());
 app.use(bodyParser);
 app.use('/api', authRoutes(router));
+app.use('/api', galleryRoutes(router));
+app.use('/api', picRoutes(router));
 
 app.listen(PORT, () => console.log('Listening on PORT'));
