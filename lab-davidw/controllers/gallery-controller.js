@@ -33,9 +33,10 @@ exports.deleteGallery = function(req) {
   if(!req.params.id) return Promise.reject(createError(400, 'bad request'));
   console.log('gallery and user ID here is: ', { _id: req.params.id, userId: req.user._id});
 
-  return Gallery.findOneAndRemove({ _id: req.params.id, userId: req.user._id})
+  return Gallery.findOneAndRemove({ _id: req.params.id, userId: req.user._id.toString()})
   .then(data => {
-    if (data === null) return createError(404, 'Gallery not found');
+    console.log(data, 'do we hit here????');
+    if (data === null) createError(404, 'Gallery not found');
   })
   .catch(err => createError(err.status, err.message));
 };

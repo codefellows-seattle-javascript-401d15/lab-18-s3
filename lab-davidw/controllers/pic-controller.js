@@ -9,10 +9,11 @@ const dataDir = `${__dirname}/../data`;
 const AWS = require('aws-sdk');
 const path = require('path');
 const createError = require('http-errors');
+const s3 = new AWS.S3();
 
 AWS.config.setPromisesDependency(require('bluebird'));
 
-const s3 = new AWS.S3();
+module.exports = exports = {};
 
 function s3UploadProm(params) {
   return new Promise((resolve, reject) => {
@@ -20,36 +21,38 @@ function s3UploadProm(params) {
       resolve(data);
       console.log(reject);
     });
-  });
+  })
+  .catch(err => Promise.reject(err));
 }
 
-module.exports = exports = {};
 
-exports.addPicToS3 = function(pic) {
-  console.log(pic);
-  if(!pic.file) return createError(400, 'Resource required');
-  if(!pic.file.path) return createError(500, 'File not saved');
+exports.addPicToS3 = function(req) {
+  console.log('FILE', req.file);
+  console.log('ANYTHING?', req);
+  if(!req.file) return createError(400, 'Resource required');
+  if(!req.file.path) return createError(500, 'File not saved');
 
-  let ext = path.extname(pic.file.originalname);
+  let ext = path.extname(req.file.originalname);
   let params = {
     ACL: 'public-read',
     Bucket: process.env.AWS_BUCKET,
-    Key: `${pic.file.filename}${ext}`,
-    Body: fs.createReadStream(pic.file.path),
+    Key: `${req.file.filename}${ext}`,
+    Body: fs.createReadStream(req.file.path),
   };
 
-  return Gallery.findById(pic.params.id)
+  return Gallery.findById(req.params.id)
   .then(() => s3UploadProm(params))
   .then(s3Data => {
     del([`${dataDir}/*`]);
     let picData = {
-      name: pic.body.name,
-      desc: pic.body.desc,
-      userId: pic.body._id,
-      galleryID: pic.params.id,
+      name: req.body.name,
+      desc: req.body.desc,
+      userId: req.user._id,
+      galleryId: req.params.id,
       imageURI: s3Data.Location,
       objectKey: s3Data.Key,
     };
+
     return new Pic(picData).save();
   })
   .then(pic => Promise.resolve(pic))
