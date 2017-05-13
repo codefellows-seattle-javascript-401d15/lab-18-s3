@@ -17,50 +17,37 @@ exports.createGallery = function(req) {
   .catch(err => createError(401, err.message));
 };
 
-exports.fetchGallery = function(req, res, id, userId) {
+exports.fetchGallery = function(req) {
   debug('#fetchGallery');
-  if(!id) return Promise.reject(createError(400, 'Bad request'));
+  if(!req.user) return Promise.reject(createError(400, 'Bad request'));
 
-  Gallery.findById(id)
-  .then(gallery => {
-    if(gallery.userId.toString() !== userId.toString()) {
-      return createError(401, 'Invalid user');
-    }
-    res.json(gallery);
-  })
-  .catch(err => res.status(err.status).send(err.message));
+  return Gallery.find(req.user, { _id : req.params.id})
+  .then(gallery => gallery)
+  .catch(err => createError(404, err.message));
+
 };
 
-exports.deleteGallery = function(res, id, userId) {
+exports.deleteGallery = function(req) {
   debug('deleteGallery');
-  if(!id) return Promise.reject(createError(400, 'bad request'));
+  if(!req.user._id) return Promise.reject(createError(400, 'bad request'));
+  if(!req.params.id) return Promise.reject(createError(400, 'bad request'));
+  console.log('gallery and user ID here is: ', { _id: req.params.id, userId: req.user._id});
 
-  Gallery.findById(id)
-  .then(gallery => {
-    if(gallery.userId.toString() !== userId.toString()) {
-      return createError(401, 'Invalid user');
-    }
-    res.json(gallery);
+  return Gallery.findOneAndRemove({ _id: req.params.id, userId: req.user._id})
+  .then(data => {
+    if (data === null) return createError(404, 'Gallery not found');
   })
-  .catch(err => res.status(err.status).send(err.message));
-
-  Gallery.findByIdAndRemove(id)
-  .then( () => {
-    res.sendStatus(204);
-  })
-  .catch(err => res.status(404).send(err.message));
+  .catch(err => createError(err.status, err.message));
 };
 
-exports.updateGallery = function(req, res, id, userId, gallery) {
+exports.updateGallery = function(req) {
   debug('#updateGallery');
-  if(!id) return Promise.reject(createError(404, 'Not found'));
+  if(!req.params.id) return Promise.reject(createError(400, 'Id required'));
 
-  Gallery.findByIdAndUpdate(id, gallery, {new: true})
-  .then(gallery => {
-    if(gallery.userId.toString() !== userId.toString()) {
-      return createError(401, 'Invalid user');
-    }
-    res.json(gallery);
+  return Gallery.findOneAndUpdate({ _id: req.params.id, userId: req.user._id}, req.body, {new: true})
+  .then(data => {
+    if (data === null) return createError(404, 'Cannot find that Gallery to update');
+    return data;
   })
-  .catch(err => res.status(err.status).send(err.message));
+  .catch(err => createError(err.status, err.message));
 };
