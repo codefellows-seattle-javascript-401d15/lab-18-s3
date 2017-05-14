@@ -19,16 +19,13 @@ function s3UploadProm(params) {
   return new Promise((resolve, reject) => {
     s3.upload(params, (err, data) => {
       resolve(data);
-      console.log(reject);
     });
-  })
-  .catch(err => Promise.reject(err));
+  });
 }
 
 
 exports.addPicToS3 = function(req) {
   console.log('FILE', req.file);
-  console.log('ANYTHING?', req);
   if(!req.file) return createError(400, 'Resource required');
   if(!req.file.path) return createError(500, 'File not saved');
 
@@ -47,16 +44,16 @@ exports.addPicToS3 = function(req) {
     let picData = {
       name: req.body.name,
       desc: req.body.desc,
-      userId: req.user._id,
-      galleryId: req.params.id,
+      userID: req.user._id,
+      galleryID: req.params.id,
       imageURI: s3Data.Location,
       objectKey: s3Data.Key,
     };
 
     return new Pic(picData).save();
   })
-  .then(pic => Promise.resolve(pic))
-  .catch(err => createError(404, err.message));
+  .then(pic => pic)
+  .catch(err => Promise.reject(err));
 };
 
 exports.fetchPic = function(req) {
