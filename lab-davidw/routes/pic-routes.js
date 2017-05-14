@@ -11,7 +11,6 @@ const picCtrl = require('../controllers/pic-controller');
 module.exports = function(router) {
 
   router.post('/gallery/:id/pic', bearerAuth, upload.single('image'), (req, res) => {
-    console.log('In ROUTE for Pic Upload');
     debug('#POST /gallery/:id/pic');
 
     picCtrl.addPicToS3(req)

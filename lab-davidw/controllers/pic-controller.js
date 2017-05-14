@@ -25,7 +25,6 @@ function s3UploadProm(params) {
 
 
 exports.addPicToS3 = function(req) {
-  console.log('FILE', req.file);
   if(!req.file) return createError(400, 'Resource required');
   if(!req.file.path) return createError(500, 'File not saved');
 
@@ -57,7 +56,6 @@ exports.addPicToS3 = function(req) {
 };
 
 exports.fetchPic = function(req) {
-  console.log('Here is the auth: ', req.auth);
   if(!req.auth) return Promise.reject(createError(404, 'No Authorization found'));
 };
 
