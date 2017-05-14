@@ -41,7 +41,6 @@ exports.createItem = function(req) {
   return Gallery.findById(req.params.id)
   .then(() => s3UploadProm(params))
   .then(s3Data => {
-    console.log('data', s3Data);
     del([`${dataDir}/*`]);
     let picData = {
       name: req.body.name,
@@ -51,7 +50,25 @@ exports.createItem = function(req) {
       imageURI: s3Data.Location,
       objectKey: s3Data.Key,
     };
-    console.log('picData', picData);
     return new Pic(picData).save();
+  })
+  .then(pic => pic)
+  .catch(err => Promise.reject(err));
+};
+
+exports.deleteItem = function(picId) {
+  if(!picId) return Promise.reject(createError(400, 'pic id required'));
+
+  return Pic.findByIdAndRemove(picId)
+  .then(pic => {
+    let params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: pic.objectKey,
+    };
+    return s3.deleteObject(params);
+  })
+  .catch(err => console.error(err))
+  .then(pic => {
+    Promise.resolve(pic);
   });
 };

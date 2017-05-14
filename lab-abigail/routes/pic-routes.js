@@ -14,15 +14,17 @@ module.exports = function(router) {
     debug('#POST /gallery/:id/pic');
     picController.createItem(req)
     .then(pic => {
-      console.log(pic);
       return res.json(pic);
     })
     .catch(err => res.send(err));
   });
 
-  // router.get('/pic/:id', bearerAuth, (req, res) => {
-  //   debug('#GET /pic/:id');
-  // });
+  router.delete('/gallery/:galleryid/pic/:picid', bearerAuth, (req, res) => {
+    debug('#DELETE /gallery/:id/pic/:id');
+    picController.deleteItem(req.params.picid)
+    .then(err => res.status(204).send(err.message))
+    .catch(err => res.send(err));
+  });
 
   return router;
 };
