@@ -98,6 +98,7 @@ Session.vim
 tags
 
 # Mongodb
-'db'
+db
 
-'.env'
+# ignore .Env
+.env

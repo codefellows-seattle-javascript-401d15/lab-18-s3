@@ -37,7 +37,7 @@
     "mocha-lcov-reporter": "^1.3.0"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "DEBUG='cfgram*' ./node_modules/mocha/bin/mocha",
     "start": "node server.js",
     "debug": "DEBUG=cfgram* nodemon server.js",
     "cover": "istanbul cover_mocha",
