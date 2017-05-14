@@ -18,7 +18,7 @@ sudo: required
 branches:
   only:
   - master
-  - test_branch
+  - tests
 before_script: npm i
 script:
   - npm run test
