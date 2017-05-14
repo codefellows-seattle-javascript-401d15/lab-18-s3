@@ -1,12 +1,11 @@
 'use strict';
 
-const Promise = require('bluebird');
-const createError = require('http-errors');
+// const createError = require('http-errors');
 const User = require('../models/user');
 
 module.exports = exports ={};
 
-exports.createItem = function(req, res){
+exports.createItem = function(req){
 
   let tempPassword = null;
   tempPassword = req.body.password;
@@ -17,17 +16,17 @@ exports.createItem = function(req, res){
 
   return newUser.generatePasswordHash(tempPassword)
   .then(user => user.save())
-  .then(user => user.generateToken())
-  .catch(err => res.status(err.status).send(err.message));
+  .then(user => {
+    return user.generateToken();
+  });
 };
 
-exports.fetchItem = function(res, reqAuth){
+exports.fetchItem = function(req, res){
 
-  if(!reqAuth) return Promise.reject(createError(404, 'Authorization required'));
-
-  return User.findOne({username: reqAuth.username})
-  .then(user => user.comparePasswordHash(reqAuth.password))
+  return User.findOne({username: req.auth.username})
+  .then(user => user.comparePasswordHash(req.auth.password))
   .then(user => user.generateToken())
-  .catch(err => res.status(err.status).send(err.message));
+  .then(token => token)
+  .catch(err => res.status(err.status).send(404, err.message));
 
 };

@@ -9,7 +9,7 @@ const errorHandler = require('./lib/error-middleware');
 const bodyParser = require('body-parser').json();
 const mongoose = require('mongoose');
 
-const app = express();
+const app = module.exports = express();
 const router = express.Router();
 const userRoutes = require('./routes/user-routes')(router);
 const galleryRoutes = require('./routes/gallery-routes')(router);
