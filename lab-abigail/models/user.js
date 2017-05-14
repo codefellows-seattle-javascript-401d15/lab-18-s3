@@ -52,7 +52,6 @@ userSchema.methods.generateFindHash = function() {
       this.save()
       .then(() => resolve(this.findHash))
       .catch(err => {
-        console.log(err);
         if(tries > 3) return reject(createError(401, 'Generate findHash failed'));
         tries++;
         _generateFindHash();
@@ -69,7 +68,6 @@ userSchema.methods.generateToken = function() {
     this.generateFindHash()
     .then(findHash => resolve(jwt.sign({token: findHash}, process.env.APP_SECRET)))
     .catch(err => {
-      console.log(err);
       reject(createError(401, 'Generate token failed'));
     });
   });

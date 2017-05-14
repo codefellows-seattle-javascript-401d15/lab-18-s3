@@ -10,6 +10,7 @@ exports.createItem = function(req, res, gallery, userId) {
 
   if(!gallery) return Promise.reject(createError(400, 'Bad Request'));
 
+
   gallery.userId = userId;
   new Gallery(gallery).save()
   .then(gallery => res.json(gallery))
@@ -28,7 +29,7 @@ exports.fetchItem = function(req, res, id, userId) {
     }
     res.json(gallery);
   })
-  .catch(err => res.status(err.status).send(err.message));
+  .catch(err => res.status(res.status).send(err.message));
 };
 
 exports.deleteItem = function(req, res, id, userId) {
@@ -46,7 +47,7 @@ exports.deleteItem = function(req, res, id, userId) {
   .then( () => {
     res.sendStatus(204);
   })
-  .catch(err => res.status(err.status).send(err));
+  .catch(err => res.status(400).send(err));
 
 };
 
