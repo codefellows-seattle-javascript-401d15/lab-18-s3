@@ -17,7 +17,6 @@ const userSchema = Schema({
 });
 
 userSchema.methods.generatePasswordHash = function(password) {
-
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, 10, (err, hash) => {
       if(err) return reject(createError(401, 'Password hashing failed'));

@@ -1,40 +1,39 @@
 'use strict';
-
 const fs = require('fs');
 const del = require('del');
 const path = require('path');
-const AWS  = require('aws-sdk');
-// const multer = require('multer');
+const AWS = require('aws-sdk');
 const dataDir = `${__dirname}/../data`;
-// const upload = multer({dest: dataDir});
 const createError = require('http-errors');
 
 const Pic = require('../models/pic');
 const Gallery = require('../models/gallery');
 
 AWS.config.setPromisesDependency(require('bluebird'));
-
 const s3 = new AWS.S3();
-
 
 function s3UploadProm(params) {
   return new Promise((resolve, reject) => {
-    if(!params) return reject(new Error('params required'));
+    if(!params) return reject(new Error('Params required'));
     s3.upload(params, (err, data) => {
       resolve(data);
     });
   });
 }
 
-module.exports = exports ={};
-
-exports.createItem =function(req){
-
+function s3DeleteProm(params) {
+  return new Promise((resolve, reject) => {
+    s3.deleteObject(params, (err, data) => {
+      if(err) reject(err);
+      resolve(data);
+    });
+  });
+}
+exports.createItem = function(req) {
   if(!req.file) return createError(400, 'Resource required');
   if(!req.file.path) return createError(500, 'File not saved');
 
   let ext = path.extname(req.file.originalname);
-
   let params = {
     ACL: 'public-read',
     Bucket: process.env.AWS_BUCKET,
@@ -55,20 +54,22 @@ exports.createItem =function(req){
       objectKey: s3Data.Key,
     };
     return new Pic(picData).save();
-  });
+  })
+  .then(pic => pic)
+  .catch(err => Promise.reject(err));
 };
 
-// router.delete('/gallery/:id/pic/:picid', bearerAuth, (req, res)=>{
-
-  // return Pic.findByIdAndRemove(req.params.id)
-  // .then(pic =>{
-  //   console.log(pic);
-  //   let params = {
-  //     Bucket: process.env.AWS_BUCKET,
-  //     Key :pic.objectKey,
-  //   };
-  //   return s3.deleteObject(params);
-  // })
-  // .then(pic => Promise.resolve(pic))
-  // .catch(err => res.status(err.status).send(err.message));
-// });
+exports.deleteItem = function(galleryId, picId) {
+  return Pic.findById(picId)
+  .then(pic => {
+    console.log('pic at controller', pic);
+    let params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: pic.objectKey,
+    };
+    return params;
+  })
+  .then(params => s3DeleteProm(params))
+  .then(() => Pic.findByIdAndRemove(picId))
+  .catch(err => Promise.reject(createError(404, err.message)));
+};
