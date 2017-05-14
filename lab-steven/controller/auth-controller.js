@@ -12,7 +12,7 @@ exports.createUser = function(reqBody, tempPw){
   return newUser.genPassHash(tempPw)
   .then(user => user.save())
   .then(user => user.genToken())
-  .catch(err => err);
+  .catch(err => Promise.reject(err));
 };
 
 exports.fetchUser = function(reqAuth){
@@ -21,5 +21,5 @@ exports.fetchUser = function(reqAuth){
   return User.findOne({username: reqAuth.username})
   .then(user => user.compareHash(reqAuth.password))
   .then(user => user.genToken())
-  .catch(err => err);
+  .catch(err => Promise.reject(err));
 };

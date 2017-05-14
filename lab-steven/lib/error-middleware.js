@@ -16,7 +16,7 @@ module.exports = function(err, req, res, next){
   }
 
   if(err.name === 'ValidationError') {
-    err = createError(400, err.message);
+    err = createError(400, err.name);
     res.status(err.status).send(err.name);
     next();
     return;

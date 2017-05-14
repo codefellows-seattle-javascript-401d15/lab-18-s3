@@ -2,7 +2,6 @@
 
 const debug = require('debug')('cfgram: authRoutes');
 const basicAuth = require('../lib/basic-auth-middleware');
-// const errHandler = require('../lib/error-middleware');
 const authCtrlr = require('../controller/auth-controller');
 
 module.exports = function(router){
@@ -15,7 +14,7 @@ module.exports = function(router){
 
     return authCtrlr.createUser(req.body, tempPass)
     .then(data => res.json(data))
-    .catch(err => res.status(err.status).send(err.message));
+    .catch(err => res.status(err.status).send(err.name));
   });
 
   router.get('/signin', basicAuth, (req, res) => {
