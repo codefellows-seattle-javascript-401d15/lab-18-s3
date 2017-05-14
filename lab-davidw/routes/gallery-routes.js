@@ -26,6 +26,7 @@ module.exports = function(router) {
 
   router.delete('/gallery/:id', bearerAuth, (req, res) => {
     debug('#DELETE /api/gallery/:id');
+
     return galleryCtrl.deleteGallery(req)
     .then(() => res.sendStatu(204))
     .catch(err => res.send(err.status).send(err.message));
@@ -34,7 +35,7 @@ module.exports = function(router) {
   router.put('/gallery/:id', bearerAuth, (req, res) => {
     debug('#PUT /api/gallery/:id');
 
-    return galleryCtrl.updateGallery(req.params.id)
+    return galleryCtrl.updateGallery(req)
     .then(gallery => res.json(gallery))
     .catch(err => res.send(err.status).send(err.message));
   });

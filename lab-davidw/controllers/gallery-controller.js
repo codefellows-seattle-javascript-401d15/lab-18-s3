@@ -31,11 +31,9 @@ exports.deleteGallery = function(req) {
   debug('deleteGallery');
   if(!req.user._id) return Promise.reject(createError(400, 'bad request'));
   if(!req.params.id) return Promise.reject(createError(400, 'bad request'));
-  console.log('gallery and user ID here is: ', { _id: req.params.id, userId: req.user._id});
 
   return Gallery.findOneAndRemove({ _id: req.params.id, userId: req.user._id.toString()})
   .then(data => {
-    console.log(data, 'do we hit here????');
     if (data === null) createError(404, 'Gallery not found');
   })
   .catch(err => createError(err.status, err.message));
@@ -43,6 +41,7 @@ exports.deleteGallery = function(req) {
 
 exports.updateGallery = function(req) {
   debug('#updateGallery');
+  console.log({ _id: req.params.id, userId: req.user._id.toString()});
   if(!req.params.id) return Promise.reject(createError(400, 'Id required'));
 
   return Gallery.findOneAndUpdate({ _id: req.params.id, userId: req.user._id}, req.body, {new: true})
