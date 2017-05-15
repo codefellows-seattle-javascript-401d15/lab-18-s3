@@ -21,7 +21,7 @@ This program allows users to store information regarding their `username`, `emai
 
 ## Create Gallery
 5. To run a POST, to create a new gallery image, type into command line: `http POST :3000/api/gallery  name=<picture name> desc=<description> 'Authorization:Bearer <authorization bearer code from User>'`
-    * Example: `http POST :3000/api/gallery name=abswhite desc=selfie 'Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg4ODU5NDY1NGJlZjUyODNhNTFhOWIxZmQzNjE0MTBhNjFlNDI4MmE0NmEyNzZhMWMzZTk0ZWJiMDRhYjEzYTEiLCJpYXQiOjE0OTQ0MjkxMDV9.azi2L8XzRk1wfKwj2uvAUauY6DxkA8vfztmFGVoMqvs'`
+    * Example: `http POST :3000/api/gallery name=abswhite desc=selfie 'Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJhNjdkMTBlOThhN2Y3MGIwNzc1MDAxYTE2MWVkZDdiNDJjNjg2OTZjZTFhZGQ2NjI4NWYyNmY0NWJiZDNlYWIiLCJpYXQiOjE0OTQ3MjA0NjR9.7UYJO4irxXjlxXEA0pNrWBWMUUafKu5H_6-xtO5XyBo'`
 
 6. To run a GET, to retrieve a new gallery image, type into command line: `http GET :3000/api/gallery/<gallery image ID> 'Authorization:Bearer <authorization bearer code from User>'`
     * Example: `http GET :3000/api/gallery/59133f11e68bc0733cc86655 'Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg4ODU5NDY1NGJlZjUyODNhNTFhOWIxZmQzNjE0MTBhNjFlNDI4MmE0NmEyNzZhMWMzZTk0ZWJiMDRhYjEzYTEiLCJpYXQiOjE0OTQ0MjkxMDV9.azi2L8XzRk1wfKwj2uvAUauY6DxkA8vfztmFGVoMqvs'`
@@ -42,3 +42,6 @@ This program allows users to store information regarding their `username`, `emai
 3. After verifying database creation in Step 2, you can enter the database environment by entering `use <database name>`.
 4. To view database contents, enter `db.users.find()` in tab.
 5. To delete database contents, enter `db.users.drop()`.
+
+http -f POST :3000/api/gallery/<gallery id>/pic name=<image name> desc=<image description> image@~/<absolute path of image> 'Authorization:Bearer <user token>'
+http -f POST :3000/api/gallery/59179ffa8aad7dde54f4d113/pic name=bruce desc=bruce+springsteen image@~/codefellows/401/labs/lab-18-s3/lab-abigail/pics/Bruce_Springsteen.jpg 'Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJhNjdkMTBlOThhN2Y3MGIwNzc1MDAxYTE2MWVkZDdiNDJjNjg2OTZjZTFhZGQ2NjI4NWYyNmY0NWJiZDNlYWIiLCJpYXQiOjE0OTQ3MjA0NjR9.7UYJO4irxXjlxXEA0pNrWBWMUUafKu5H_6-xtO5XyBo'
