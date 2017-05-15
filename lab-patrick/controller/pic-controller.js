@@ -62,7 +62,6 @@ exports.createItem = function(req) {
 exports.deleteItem = function(galleryId, picId) {
   return Pic.findById(picId)
   .then(pic => {
-    console.log('pic at controller', pic);
     let params = {
       Bucket: process.env.AWS_BUCKET,
       Key: pic.objectKey,
