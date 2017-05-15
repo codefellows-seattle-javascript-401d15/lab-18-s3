@@ -32,28 +32,7 @@ module.exports = function(router){
     if(!req.file) return createError(400, 'Resource required')
     if(!req.file.path) return createError(500, 'File not saved')
 
-    // let ext = path.extname(req.file.originalname)
-    // let params = {
-    //   ACL: 'public-read',
-    //   Bucket: process.env.AWS_BUCKET,
-    //   Key: `${req.file.filename}${ext}`,
-    //   Body: fs.creteReadStream(req.file.path)
-    // }
-    //
-    // return Gallery.findById(req.params.id)
-    //   .then(() => s3UploadProm(params))
-    //   .then(s3Data => {
-    //     del([`${dataDir}/*`])
-    //     let picData = {
-    //       name: req.body.name,
-    //       desc: req.body.desc,
-    //       userID: req.user._id,
-    //       galleryID: req.params.id,
-    //       imageURI: s3Data.Location,
-    //       objectKey: s3Data.Key
-    //     }
-    //     return new Pic(picData).save()
-    //   })
+
     return picCtrl.createPic(req,s3UploadProm)
       .then(pic => res.json(pic))
       .catch(err => res.send(err))
@@ -62,5 +41,19 @@ module.exports = function(router){
   router.get('/pic/:id', bearerAuth, (req,res) => {
     debug('#GET /pic/:id')
 
+    return picCtrl.readPic(req)
+      .then(img => res.json(img))
+      .catch(err => res.status(err.status).send(err.message))
+
   })
+
+  router.delete('/pic/:id', bearerAuth, (req,res) => {
+    debug('#DELETE /pic/:id')
+
+    return picCtrl.deletePic(req)
+      .then(() => res.sendStatus(204))
+      .catch(err => res.status(err.status).send(err.message))
+  })
+
+  return router
 }

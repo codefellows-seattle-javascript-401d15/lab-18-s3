@@ -1,6 +1,7 @@
 'use strict'
 
 const Pic = require('../models/pic')
+const Gallery = require('../models/gallery')
 const mongoose = require('mongoose')
 const dataDir = `${__dirname}/../data`
 const multer = require('multer')
@@ -9,6 +10,7 @@ const del = require('del')
 const AWS = require('aws-sdk')
 const path = require('path')
 const fs = require('fs')
+const createError = require('http-errors')
 
 module.exports = exports = {}
 
@@ -36,4 +38,31 @@ exports.createPic = function(req,s3upload){
       }
       return new Pic(picData).save()
     })
+}
+
+exports.readPic = function(reqPic){
+
+  return Pic.findById(reqPic.params.id)
+    .then(pic => {
+      if (pic.userId.toString() !== reqPic.user._id.toString()) {
+        return Promise.reject(createError(401, 'Invalid user'))
+      }
+      return Promise.resolve(pic)
+    })
+    .catch(() => Promise.reject(createError(404, 'Picture not found')))
+}
+
+exports.deletePic = function(reqPic) {
+  // let params ={
+  //   Bucket: 'STRING_VALUE',
+  //   Key: 'STRING_VALUE';
+  // }
+
+  return Pic.findByIdAndRemove(reqPic.params.id)
+    // .then(() => s3.deleteObject(params))
+    .then(data => {
+     console.log(data)
+     return Pic.findByIdAndRemove(reqPic.params.imageId)
+    })
+    .catch(err => Promise.reject(createError(404, err.message)))
 }
