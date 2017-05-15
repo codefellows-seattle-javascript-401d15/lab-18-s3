@@ -4,7 +4,7 @@ const chai = require('chai');
 const http = require('chai-http');
 chai.use(http);
 const expect = chai.expect;
-const User = require('../model/user.js')
+const User = require('../model/user.js');
 const server = require('../server');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
@@ -17,10 +17,6 @@ const testUser = {
 };
 
 describe('auth-routes.js', function(){
-  // before(function(done){
-  //   server.listen(3030);
-  //   done();
-  // });
 
   describe('#POST /api/signup', function(){
     afterEach(function(done){

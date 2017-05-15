@@ -13,7 +13,7 @@ exports.createGal = function(reqBody, reqUser){
   reqBody.userId = reqUser._id;
   return new Gallery(reqBody).save()
   .then(gallery => gallery)
-  .catch(err => createError(400, err.message));
+  .catch(err => Promise.reject(createError(400, err.name)));
 };
 
 exports.fetchGal = function(reqUser, galId){
@@ -21,19 +21,20 @@ exports.fetchGal = function(reqUser, galId){
 
   return Gallery.find(galId)
   .then(gallery => gallery)
-  .catch(err => createError(404, err.message));
+  .catch(err => Promise.reject(err));
 
 };
 
 exports.updateGal = function(reqBody, galId, reqUserId){
   debug('#updateGal');
 
+  if(!reqBody.name && !reqBody.desc) return Promise.reject(createError(400, 'Update required'));
   return Gallery.findOneAndUpdate({ _id: galId, userId: reqUserId}, reqBody, { new: true })
   .then(data => {
-    if (data === null) return createError(404, 'Gallery Not found');
+    if (data === null) return Promise.reject(createError(404, 'Gallery Not found'));
     return data;
   })
-  .catch(err => createError(err.status, err.message));
+  .catch(err => Promise.reject(createError(400, err.name)));
 };
 
 exports.deleteGal = function(galId, reqUserId){
@@ -41,8 +42,8 @@ exports.deleteGal = function(galId, reqUserId){
 
   return Gallery.findOneAndRemove({ _id: galId, userId: reqUserId})
   .then(data => {
-    if (data === null) return createError(404, 'Gallery Not found');
+    if (data === null) return Promise.reject(createError(404, 'Gallery Not found'));
     return data;
   })
-  .catch(err => createError(err.status, err.message));
+  .catch(err => Promise.reject(err));
 };

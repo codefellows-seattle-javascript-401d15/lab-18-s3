@@ -1,6 +1,5 @@
 'use strict';
 
-// const createError = require('http-errors');
 const debug = require('debug')('cfgram:gallery-routes');
 const bearerAuth = require('../lib/bearer-auth-middleware');
 const galCtrlr = require('../controller/gallery-controller');
@@ -11,16 +10,15 @@ module.exports = function(router){
 
     return galCtrlr.createGal(req.body, req.user)
     .then(gallery => res.json(gallery))
-    .catch(err => res.status(err.status).send(err.message));
+    .catch(err => res.status(err.status).send(err.name));
 
   });
 
   router.get('/gallery/:id', bearerAuth, (req, res) => {
     debug('#GET /api/gallery/:id');
-
     return galCtrlr.fetchGal(req.user, { _id : req.params.id})
     .then(gallery => res.json(gallery))
-    .catch(err => res.status(err.status).send(err.message));
+    .catch(err => res.status(err.status).send(err.name));
 
   });
 
@@ -29,7 +27,7 @@ module.exports = function(router){
 
     return galCtrlr.updateGal(req.body, req.params.id, req.user._id)
     .then(gallery => res.json(gallery))
-    .catch(err => res.status(err.status).send(err.message));
+    .catch(err => res.status(err.status).send(err.name));
 
   });
 
@@ -38,7 +36,7 @@ module.exports = function(router){
 
     return galCtrlr.deleteGal(req.params.id, req.user._id)
     .then(() => res.sendStatus(204))
-    .catch(err => res.status(err.status).send(err.message));
+    .catch(err => res.status(err.status).send(err.name));
   });
   return router;
 };

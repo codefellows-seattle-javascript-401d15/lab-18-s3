@@ -15,13 +15,13 @@ module.exports = function(req, res, next) {
   if(!token) return next(createError(401, 'Token Required'));
 
   jwt.verify(token, process.env.APP_SECRET, (err, decoded) => {
-    if(err) return next(err);
+    if(err) return next(createError(401, err.name));
 
     User.find({findHash: decoded.token})
     .then(user => {
       req.user = user[0];
       next();
     })
-    .catch(err => next(createError(401, err.message)));
+    .catch(err => next(createError(401, err.name)));
   });
 };
