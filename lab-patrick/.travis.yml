@@ -16,6 +16,6 @@ env:
   - PORT=3000
   - APP_SECRET='lulwat top secret'
 sudo: required
-before_script: npm i
+before_script: npm i -g eslint mocha
 script:
   - npm run test
