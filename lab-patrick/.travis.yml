@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - '4.4.3'
+  - 'stable'
 services:
   - mongodb
 addons:
@@ -16,6 +16,6 @@ env:
   - PORT=3000
   - APP_SECRET='lulwat top secret'
 sudo: required
-before_script: npm i -g eslint mocha
+before_script: npm i
 script:
-  - ./script/test-submissions.sh
+  - npm run test
