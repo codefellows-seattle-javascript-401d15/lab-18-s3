@@ -4,6 +4,7 @@ const chai = require('chai');
 const http = require('chai-http');
 chai.use(http);
 const expect = chai.expect;
+
 const User = require('../model/user.js');
 const Gallery = require('../model/gallery.js');
 const server = require('../server');
@@ -48,20 +49,6 @@ describe('gallery-routes.js', function(){
   });
 
   describe('#POST /api/gallery', () => {
-    // beforeEach(done => {
-    //   new User(testUser)
-    //   .genPassHash(testUser.password)
-    //   .then(user => user.save())
-    //   .then(user => {
-    //     this.tempUser = user;
-    //     return user.genToken();
-    //   })
-    //   .then(token => {
-    //     this.tempToken = token;
-    //     done();
-    //   })
-    //   .catch(done);
-    // });
 
     it('404 on bad route', done => {
       chai.request(server)
@@ -107,20 +94,6 @@ describe('gallery-routes.js', function(){
   });
 
   describe('#GET /api/gallery/:id', () => {
-    // beforeEach(done => {
-    //   new User(testUser)
-    //   .genPassHash(testUser.password)
-    //   .then(user => user.save())
-    //   .then(user => {
-    //     this.tempUser = user;
-    //     return user.genToken();
-    //   })
-    //   .then(token => {
-    //     this.tempToken = token;
-    //     done();
-    //   })
-    //   .catch(done);
-    // });
 
     beforeEach(done => {
       testGal.userId = this.tempUser._id.toString();

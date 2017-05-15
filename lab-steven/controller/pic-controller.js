@@ -8,6 +8,7 @@ const del = require('del');
 const AWS  = require('aws-sdk');
 const dataDir = `${__dirname}/../data`;
 
+
 const Pic = require('../model/pic');
 const Gallery = require('../model/gallery');
 
@@ -38,8 +39,8 @@ function s3DeleteProm(params){
 exports.createPic = function(req){
   debug('#createPic');
 
-  if(!req.file) return createError(400, 'Resource required');
-  if(!req.file.path) return createError(500, 'File not saved');
+  if(!req.file) return Promise.reject(createError(400, 'Resource required'));
+  if(!req.file.path) return Promise.reject(createError(500, 'File not saved'));
 
   let ext = path.extname(req.file.originalname);
   let params = {
@@ -63,8 +64,8 @@ exports.createPic = function(req){
     };
     return new Pic(picData).save();
   })
-  .then(pic => pic)
-  .catch(err => createError(err.status, err.name));
+  .then(pic => Promise.resolve(pic))
+  .catch(err => Promise.reject(createError(err.status, err.name)));
 };
 
 exports.fetchPic = function(reqUser, picId){
@@ -80,7 +81,7 @@ exports.deletePic = function(reqUser, picId){
 
   return Pic.find({ _id: picId, userID: reqUser._id})
   .then(pic => {
-    if (pic === null) return Promise.reject(createError(404, 'Not found'));
+    if (pic[0] === null) return Promise.reject(createError(404, 'Not found'));
     let params = {
       Bucket: process.env.AWS_BUCKET,
       Key: pic[0].objectKey,
