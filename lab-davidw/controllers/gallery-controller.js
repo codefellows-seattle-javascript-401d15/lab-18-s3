@@ -41,7 +41,6 @@ exports.deleteGallery = function(req) {
 
 exports.updateGallery = function(req) {
   debug('#updateGallery');
-  console.log({ _id: req.params.id, userId: req.user._id.toString()});
   if(!req.params.id) return Promise.reject(createError(400, 'Id required'));
 
   return Gallery.findOneAndUpdate({ _id: req.params.id, userId: req.user._id}, req.body, {new: true})

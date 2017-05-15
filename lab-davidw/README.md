@@ -28,26 +28,41 @@ Add a gallery model, with a POST, PUT, GET, and DELETE routes to interact with i
 You can sign up and sign in with the following end points:
 note: this is based on using 'HTTPie'
 - Sign up:
-    - http POST
-        - http POST :3000/api/signup username=<UniqueUsername> password=<password> email=<UniqueEmail>
+    - http POST :3000/api/signup username=<UniqueUsername> password=<password> email=<UniqueEmail>
+
 - Sign in:
-    - http GET
-        - http :3000/api/signin -a<username>:<password>
+    - http :3000/api/signin -a<username>:<password>
 
 ###### Gallery management
-You can sign up and sign in with the following end points:
+You create and manage galleries with the following end points:
 note: this is based on using 'HTTPie'
 - Create Gallery:
-    - http POST
-        - http POST :3000/api/gallery username=<UniqueUsername> password=<password> email=<UniqueEmail>
+    - http POST :3000/api/gallery username=<UniqueUsername> password=<password> email=<UniqueEmail>
+
 - Get Gallery array:
-    - http GET
-        - http GET :3000/api/galllery/<galleryId> 'Authorization:Bearer <your token string here>'
+    - http GET :3000/api/galllery/<galleryId> 'Authorization:Bearer <your token string here>'
+
 - Update Gallery:
-    - http PUT :3000/api/gallery/<galleryId> 'Authorization:Bearer <your token string here>'
+    - http PUT :3000/api/gallery/<galleryId>/name=<NewName>, desc=<newDesc> 'Authorization:Bearer <your token string here>'
 
 - Delete Gallery:
     -http DELETE :3000/api/gallery/<galleryId> 'Authorization:Bearer <your token string here>'
+
+###### Picture management
+You add and manage Pictures with the following end points:
+note: this is based on using 'HTTPie'
+- Upload Picture to Gallery:
+    - http -f POST :3000/api/gallery/<gallery id>/pic name=<image name> desc=<image description> image@~/<absolute path of image> 'Authorization:Bearer <your token string here>'
+
+- Get Gallery array:
+    - http GET :3000/api/galllery/<galleryId>/pic 'Authorization:Bearer <your token string here>'
+
+- Update Gallery:
+    - http PUT :3000/api/gallery/<galleryId>/name=<NewName>, desc=<newDesc> 'Authorization:Bearer <your token string here>'
+
+- Delete Gallery:
+    -http DELETE :3000/api/gallery/<galleryId> 'Authorization:Bearer <your token string here>'
+
 
 - Test!
    - npm run test

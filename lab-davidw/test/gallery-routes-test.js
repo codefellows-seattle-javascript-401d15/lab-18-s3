@@ -44,7 +44,6 @@ describe('Gallery Routes', function() {
       .then( user => user.save())
       .then( user => {
         this.tempUser = user;
-        console.log('temp user', this.tempUser);
         return user.generateToken();
       })
       .then( token => {
