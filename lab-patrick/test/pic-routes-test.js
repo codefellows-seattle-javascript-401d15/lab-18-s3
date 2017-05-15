@@ -26,16 +26,11 @@ const testGallery ={
   desc: 'test desc',
 };
 
-// const testPic={
-//   name: 'test',
-//   desc: 'image',
-// };
-
 describe('Post route for pictures', function (){
   let tempUser;
   let tempToken;
   let tempGallery;
-  let tempPic;
+  // let tempPic;
   beforeEach(done => {
     new User(testUser)
     .generatePasswordHash(testUser.password)
