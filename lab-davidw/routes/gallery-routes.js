@@ -28,7 +28,7 @@ module.exports = function(router) {
     debug('#DELETE /api/gallery/:id');
 
     return galleryCtrl.deleteGallery(req)
-    .then(() => res.sendStatu(204))
+    .then(() => res.sendStatus(204))
     .catch(err => res.send(err.status).send(err.message));
   });
 
