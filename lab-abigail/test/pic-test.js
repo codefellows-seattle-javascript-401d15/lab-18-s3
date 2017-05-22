@@ -27,7 +27,7 @@ describe('pics', function() {
 
   mongoose.Promise = Promise;
 
-  describe.only('Pic tests', function() {
+  describe('Pic tests', function() {
     before(done => {
       new User(exampleUser)
       .generatePasswordHash(exampleUser.password)
