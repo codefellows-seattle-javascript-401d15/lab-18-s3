@@ -1,36 +1,33 @@
 'use strict';
 
-const expect= require('chai').expect;
 const superagent = require('superagent');
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
-
+const chai = require('chai');
 const User = require('../models/user');
 const Gallery = require('../models/gallery');
 const Pic = require('../models/pic');
-
-mongoose.Promsie = Promise;
-
-require('../server');
-
+const expect = chai.expect;
+require('../server.js');
 const url = `http://localhost:${process.env.PORT}`;
+mongoose.Promise = Promise;
 
 const testUser = {
-  username: 'testUser',
-  password: 'testPassword',
-  email: 'test@test.com',
+  username: 'carlomari',
+  email: 'carlomari@squidbilly.com',
+  password: 'password',
 };
 
-const testGallery ={
-  name: 'testGal',
-  desc: 'test desc',
+const testGallery = {
+  name: 'this is only a test',
+  desc: 'test all the things',
 };
 
-describe('Post route for pictures', function (){
+describe('Pic routes', function() {
   let tempUser;
   let tempToken;
   let tempGallery;
-  // let tempPic;
+
   beforeEach(done => {
     new User(testUser)
     .generatePasswordHash(testUser.password)
@@ -46,11 +43,11 @@ describe('Post route for pictures', function (){
     .then(gallery => {
       gallery.userId = tempUser._id;
       tempGallery = gallery;
-      gallery.save();
       done();
     })
     .catch(err => done(err));
   });
+
   afterEach(done => {
     Promise.all([
       User.remove({}),
@@ -61,27 +58,27 @@ describe('Post route for pictures', function (){
     .catch(err => done(err));
   });
 
-  describe('POST pic route', function(){
-    it('should add pic and return pic data', done =>{
+  describe('POST method', function() {
+    it('should post a picture and have status of 200', done => {
       superagent.post(`${url}/api/gallery/${tempGallery._id}/pic`)
       .set('Content-Type', 'application/json')
-      .set({Authorization: `Bearer ${tempToken}`})
-      .field('name', 'Raspberry Pi')
-      .field('desc', 'A tiny computer')
+      .set('Authorization', `Bearer ${tempToken}`)
+      .field('name', 'pigame')
+      .field('desc', 'superbatspider')
       .attach('image', `${__dirname}/assets/pigame.jpg`)
-      .end((err, res)=>{
+      .end((err, res) => {
+        expect(res.body.name).to.equal('pigame');
         expect(res.status).to.equal(200);
         done();
       });
     });
-    it('should respond with 401 with no token', done =>{
+    it('should post as status of 401 on bad request', done => {
       superagent.post(`${url}/api/gallery/${tempGallery._id}/pic`)
       .set('Content-Type', 'application/json')
-      .field('name', 'Raspberry Pi')
-      .field('desc', 'A tiny computer')
+      .field('name', 'pigame')
+      .field('desc', 'superbatspider')
       .attach('image', `${__dirname}/assets/pigame.jpg`)
-      .end((err, res)=>{
-        console.log(res.body);
+      .end((err, res) => {
         expect(res.status).to.equal(401);
         done();
       });

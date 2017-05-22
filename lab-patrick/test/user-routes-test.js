@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const User = require('../models/user');
 
-mongoose.Promsie = Promise;
+mongoose.Promise = Promise;
 
 require('../server');
 

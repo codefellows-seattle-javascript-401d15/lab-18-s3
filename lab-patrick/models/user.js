@@ -44,6 +44,7 @@ userSchema.methods.generateFindHash = function() {
     let tries = 0;
     let _generateFindHash = () => {
       this.findHash = crypto.randomBytes(32).toString('hex');
+      console.log(this.findash);
       this.save()
       .then(() => resolve(this.findHash))
       .catch(err => {
