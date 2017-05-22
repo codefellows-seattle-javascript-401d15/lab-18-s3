@@ -27,7 +27,7 @@ describe('pics', function() {
 
   mongoose.Promise = Promise;
 
-  describe('Pic tests', function() {
+  describe.only('Pic tests', function() {
     before(done => {
       new User(exampleUser)
       .generatePasswordHash(exampleUser.password)
@@ -64,7 +64,7 @@ describe('pics', function() {
     });
 
     describe('POST test', function() {
-      it('should add a new image', done => {
+      it('should create new image', done => {
         request.post(`${url}/api/gallery/${tempGallery._id}/pic`)
         .set('Content-Type', 'application/json')
         .set({Authorization: `Bearer ${this.tempToken}`})
@@ -72,11 +72,27 @@ describe('pics', function() {
         .field('description', 'bruce springsteen love')
         .attach('image', `${__dirname}/assets/BruceSpringsteen.jpg`)
         .end((err, res) => {
-          expect(res.status).to.equal(200);
+          done();
+        });
+      });
+
+      it('should give 401 on bad request', done => {
+        request.post(`${url}/api/gallery/${tempGallery._id}/pic`)
+        .set('Content-Type', 'application/json')
+        .field('name', 'bruce springsteen')
+        .field('description', 'bruce springsteen love')
+        .attach('image', `${__dirname}/assets/BruceSpringsteen.jpg`)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
           done();
         });
       });
     });
-
+    describe('DELETE test', function() {
+      it('should delete the photo', done => {
+        request.delete(`${url}/api/gallery/${tempGallery._id}/pic`);
+        done();
+      });
+    });
   });
 });
