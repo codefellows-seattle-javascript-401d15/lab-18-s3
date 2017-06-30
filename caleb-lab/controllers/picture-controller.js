@@ -27,7 +27,7 @@ function s3UploadProm(params){
   .catch(err => Promise.reject(err))
 }
 
-exports.uploadPicture = function(req){
+exports.postPicture = function(req){
   debug('#POST /picture/:galleryId')
 
   if(!req.file) return Promise.reject(createError(400, 'No target file found'))

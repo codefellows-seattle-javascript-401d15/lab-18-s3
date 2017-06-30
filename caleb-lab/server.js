@@ -12,6 +12,7 @@ const mongoose = require('mongoose')
 
 const authRoutes = require('./routes/auth-routes.js')
 const galleryRoutes = require('./routes/gallery-routes.js')
+const pictureRoutes = require('./routes/picture-routes.js')
 
 const app = module.exports = express()
 const router = express.Router()
@@ -26,6 +27,7 @@ app.use(cors())
 app.use(bodyParser)
 app.use('/api', authRoutes(router))
 app.use('/api', galleryRoutes(router))
+app.use('/api', pictureRoutes(router))
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`))
 

@@ -5,21 +5,16 @@ const debug = require('debug')('cfgram:picture-model')
 const Promise = require('bluebird')
 const bearerAuth = require('../lib/bearer-auth-middleware')
 const multer = require('multer')
-const dataDir = require(`${__dirname}/../data`)
+const dataDir = `${__dirname}/../data`
 const upload = multer({dest: dataDir})
 
 module.exports = function(router){
   router.post('/picture/:galleryId', bearerAuth, upload.single('image'), (req, res) => {
     ('#POST picture')
-    picCtrl.postPic(req)
+    picCtrl.postPicture(req)
     .then(picture => res.json(picture))
     .catch(err => res.send(err.message))
   })
-
-  // router.get('/picture/:pictureId', bearerAuth,   (req, res) => {
-  //
-  //
-  // })
 
   router.delete('/picture/:pictureId', bearerAuth, (req, res) => {
     ('#DELETE picture')

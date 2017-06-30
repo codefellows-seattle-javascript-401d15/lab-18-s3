@@ -10,7 +10,6 @@ module.exports = function(router){
 
     req.body.userId = req.user._id
 
-    console.log('user', req.user);
     return galleryCtrl.createGallery(req.body)
     .then(gallery => res.json(gallery))
     .catch(err => res.status(err.status).send(err.message))
@@ -18,8 +17,6 @@ module.exports = function(router){
 
   router.get('/gallery/:id', bearerAuth, (req, res) => {
     debug('GET /api/gallery/:id')
-    console.log(req.params.id);
-    console.log(req.user._id);
     return galleryCtrl.fetchGallery(req.params.id, req.user._id)
     .then(gallery => res.json(gallery))
     .catch(err => res.status(err.status).send(err.message))

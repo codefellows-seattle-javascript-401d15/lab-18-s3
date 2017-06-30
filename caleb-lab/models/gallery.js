@@ -8,6 +8,7 @@ const gallerySchema = Schema({
   desc: {type: String, required: true},
   created: {type: Date, default: Date.now, required: true},
   userId: {type: Schema.Types.ObjectId, required: true},
+  pictures: [{type: Schema.Types.ObjectId, ref: 'pic'}],
 })
 
 module.exports = mongoose.model('gallery', gallerySchema)
