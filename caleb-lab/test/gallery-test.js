@@ -52,9 +52,7 @@ describe('Gallery Routes', function(){
     it('should return a gallery', done => {
       request.post(`${url}/api/gallery`)
       .send(exampleGallery)
-      .set({
-        Authorization: `Bearer ${this.tempToken}`
-      })
+      .set({Authorization: `Bearer ${this.tempToken}`})
       .end((err, res) => {
         if(err) return done()
         let date = new Date(res.body.created).toString()
@@ -98,9 +96,7 @@ describe('Gallery Routes', function(){
 
     it('should return a gallery', done => {
       request.get(`${url}/api/gallery/${this.tempGallery._id}`)
-      .set({
-        Authorization: `Bearer ${this.tempToken}`
-      })
+      .set({Authorization: `Bearer ${this.tempToken}`})
       .end((err, res) => {
         if(err) return done()
         console.log('token',this)
@@ -115,9 +111,7 @@ describe('Gallery Routes', function(){
 
     it('should show a successful retrieval of a gallery 200', done => {
       request.get(`${url}/api/gallery/${this.tempGallery._id}`)
-      .set({
-        Authorization: `Bearer ${this.tempToken}`
-      })
+      .set({Authorization: `Bearer ${this.tempToken}`})
       .end((err, res) => {
         if(err) return done()
         expect(res.status).to.equal(200)
@@ -153,9 +147,7 @@ describe('Gallery Routes', function(){
 
     it('should return a 204 success', done => {
       request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
-      .set({
-        Authorization: `Bearer exampleUser.tempToken`
-      })
+      .set({Authorization: `Bearer exampleUser.tempToken`})
       .end((err, res) => {
         if(err) return done()
         expect(res.status).to.equal(204)

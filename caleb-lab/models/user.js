@@ -19,7 +19,6 @@ const userSchema = Schema({
 
 userSchema.methods.generatePasswordHash = function(password){
   debug('#generatePasswordHash')
-
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, 10, (err, hash) => {
       if(err) return reject(createError(401,'password hashing failed'))
@@ -31,12 +30,10 @@ userSchema.methods.generatePasswordHash = function(password){
 
 userSchema.methods.comparePasswordHash = function(password){
   debug('#comparePasswordHash')
-
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, this.password, (err, valid) => {
       if(err) return reject(createError(401, 'Password validataion failed'))
       if(!valid) return reject(createError(401, 'wrong password, you n\'wah '))
-
       resolve(this)
     })
   })
@@ -44,17 +41,14 @@ userSchema.methods.comparePasswordHash = function(password){
 
 userSchema.methods.generateFindHash = function(){
   debug('#generateFindHash')
-
   return new Promise((resolve, reject) => {
     let tries = 0
-
     _generateFindHash.call(this)
-
     function _generateFindHash(){
       this.findHash = crypto.randomBytes(32).toString('hex')
       this.save()
       .then(() => resolve(this.findHash))
-      .catch(() => {//potentially need err as a single param here. doubtful, since wwe don't use it.
+      .catch(() => {
         if(tries > 3) return reject(createError(401, 'Generate findhash failed.'))
         tries++
         _generateFindHash()
@@ -65,7 +59,6 @@ userSchema.methods.generateFindHash = function(){
 
 userSchema.methods.generateToken = function(){
   debug('#generateToken')
-
   return new Promise((resolve, reject) => {
     console.log(process.env.MONGODB_URI);
     this.generateFindHash()

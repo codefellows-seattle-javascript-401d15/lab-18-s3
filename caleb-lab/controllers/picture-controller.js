@@ -29,7 +29,6 @@ function s3UploadProm(params){
 
 exports.postPicture = function(req){
   debug('#POST /picture/:galleryId')
-
   if(!req.file) return Promise.reject(createError(400, 'No target file found'))
   if(!req.file.path) return Promise.reject(createError(500, 'File upload unsuccessful'))
 
@@ -45,7 +44,6 @@ exports.postPicture = function(req){
   .then(() => s3UploadProm(params))
   .then(s3Data => {
     console.log('s3 data', s3Data);
-
     del([`${dataDir}/*`])
     let picData = {
       name: req.body.name,
@@ -64,7 +62,6 @@ exports.postPicture = function(req){
 exports.deletePic = function(pictureId){
   debug('#DELETE /picture/:pictureId')
   if(!pictureId) return Promise.reject(createError(400, 'No targeted picture'))
-
   return Picture.findByIdAndRemove(pictureId)
   .then(picture => Promise.resolve(picture))
 }

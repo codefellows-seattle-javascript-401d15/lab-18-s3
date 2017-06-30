@@ -9,12 +9,10 @@ module.exports = exports = {}
 exports.createUser = function(body){
   debug('#createUser')
   if(!body) return Promise.reject(createError(400, '!!No user!!'))
-  // if(!password) return Promise.reject(createError(400, '!!no password!!'))
-
+  if(!body.password) return Promise.reject(createError(400, '!!no password!!'))
   let tempPassword = body.password
   body.password = null
   delete body.password
-
   let newUser = new User(body)
   return newUser.generatePasswordHash(tempPassword)
     .then(user => user.save())

@@ -36,6 +36,5 @@ exports.deleteGallery = function(id){
   Gallery.findById(id)
   .then(gallery => console.log(`Gallery DELETED: \n`, gallery))
   .catch(err => Promise.reject(err))
-
   return Gallery.findByIdAndRemove(id)
 }
