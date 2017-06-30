@@ -58,10 +58,10 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-
 # database hidden
 db/
+
+# dotenv environment variables file
+.env
 
 # End of https://www.gitignore.io/api/node
