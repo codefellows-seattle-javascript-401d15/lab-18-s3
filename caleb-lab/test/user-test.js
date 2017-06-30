@@ -23,17 +23,15 @@ describe('Auth Routes', function(){
     describe('with a valid body', function(){
       after(done => {
         User.remove({})
-        .then( () => done())
+        .then(() => done())
         .catch(done);
       });
-      it('should return a token', done => {
+      it('should return a 200 success', done => {
         request.post(`${url}/api/signup`)
         .send(exampleUser)
         .end((err, res) => {
           if(err) return done(err);
-          console.log('\ntoken: ', res.text, '\n');
           expect(res.status).to.equal(200);
-          expect(res.text).to.be.a('string');
           done();
         });
       });

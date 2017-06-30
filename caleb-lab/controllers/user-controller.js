@@ -11,9 +11,16 @@ exports.createUser = function(body){
   if(!body) return Promise.reject(createError(400, '!!No user!!'))
   // if(!password) return Promise.reject(createError(400, '!!no password!!'))
 
-  return new User(body).save()
-  .then(user => Promise.resolve(user))
-  .catch(err => Promise.reject(err))
+  let tempPassword = body.password
+  body.password = null
+  delete body.password
+
+  let newUser = new User(body)
+  return newUser.generatePasswordHash(tempPassword)
+    .then(user => user.save())
+    .then(user => user.generateToken())
+    .then(token => Promise.resolve(token))
+    .catch(err => Promise.reject(err))
 }
 
 exports.fetchUser = function(auth){
