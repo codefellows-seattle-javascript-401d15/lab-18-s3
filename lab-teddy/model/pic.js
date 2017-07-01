@@ -13,4 +13,4 @@ const picSchema = Schema({
   created:{type: String, require: true, default: Date.now},
 });
 
-module.exports = mongoose.module('pic', picSchema);
+module.exports = mongoose.model('pic', picSchema);

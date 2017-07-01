@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
-const debug = require('debug')('cfgram:user-model');
+const debug = require('debug')('cfgram:user.js');
 
 const Schema = mongoose.Schema;
 
@@ -21,6 +21,8 @@ userSchema.methods.generatePasswordHash = function(password){
   debug('#generatePasswordHash');
 
   return new Promise((resolve, reject) => {
+    if(!password) return reject(createError(400, 'Password required'));
+
     bcrypt.hash(password, 10, (err, hash) =>{
       if(err) return reject (createError(401, 'Password hashing failed'));
       this.password = hash;
@@ -33,10 +35,10 @@ userSchema.methods.comparePasswordHash = function(password){
   debug('#comparePasswordHash');
 
   return new Promise((resolve, reject) => {
+    if(!password) return reject(createError(400, 'Password Required'));
     bcrypt.compare(password, this.password, (err, valid) =>{
       if(err) return reject(createError(401, 'Password validation failed'));
       if(!valid) return reject(createError(401, 'Wrong Password'));
-
       resolve(this);
     });
   });
@@ -64,7 +66,6 @@ userSchema.methods.generateFindHash = function(){
 userSchema.methods.generateToken = function(){
   debug('#generateToken');
   return new Promise((resolve, reject) => {
-    console.log(process.env.APP_SECRET);
     this.generateFindHash()
     .then(findHash => resolve(jwt.sign({token: findHash}, process.env.APP_SECRET)))
     .catch(err => {
