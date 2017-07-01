@@ -26,5 +26,5 @@ exports.fetchAccount = function(checkUser) {
   .then(user => user.comparePasswordHash(checkUser.password))
   .then(user => user.generateToken())
   .then(token => token())
-  .then(err => Promise.reject(createError(401, 'Not Authorized')))
+  .catch(err => Promise.reject(createError(401, 'Not Authorized')))
 }
