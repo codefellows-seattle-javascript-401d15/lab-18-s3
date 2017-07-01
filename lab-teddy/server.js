@@ -5,11 +5,11 @@ require('dotenv').load();
 const express = require('express');
 const cors = require('cors');
 const Promise = require('bluebird');
-const errorHandler = require('./lib/error-middleware');
-const authRoutes = require('./routes/auth-routes');
-const galleryRoutes = require('./routes/gallery-routes');
-const picRoutes = require('./routes/pic-routes');
-const bodyParser = require('body-parser').json();
+const errorHandler = require('./lib/err-middleware');
+const authRoutes = require('./route/auth-routes');
+const galleryRoutes = require('./route/gallery-routes');
+const picRoutes = require('./route/pic-route');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -22,7 +22,7 @@ mongoose.connect(MONGODB_URI);
 
 app.use(errorHandler);
 app.use(cors());
-app.use(bodyParser);
+app.use(bodyParser.json());
 app.use('/api', authRoutes(router));
 app.use('/api', galleryRoutes(router));
 app.use('/api', picRoutes(router));

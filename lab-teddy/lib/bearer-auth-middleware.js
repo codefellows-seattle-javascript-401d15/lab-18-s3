@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 const debug = require('debug')('cfgram:bearer-auth-middleware');
 
-const User = require('../model/user');
+const User = require('../model/user.js');
 
 module.exports = function(req, res, next) {
   debug('bearer-auth-middleware');
@@ -12,7 +12,6 @@ module.exports = function(req, res, next) {
   let authHeaders = req.headers.authorization;
   if(!authHeaders) return next(createError(401, 'Authorization headers required'));
 
-  // Bearer somerandomtoken => ['Bearer ', 'somerandomtoken']
   let token = authHeaders.split('Bearer ')[1];
   if(!token) return next(createError(401, 'Token required'));
 
