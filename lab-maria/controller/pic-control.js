@@ -23,7 +23,6 @@ function s3UploadProm(params) {
 }
 
 function s3DeleteProm(params) {
-  console.log('fuck');
   return new Promise((resolve, reject) => {
     s3.deleteObject(params, (err, data) => {
       return resolve(data);
@@ -59,23 +58,28 @@ exports.postPic = function(req) {
       imageURI: s3Data.Location,
       objectKey: s3Data.Key,
     };
-    console.log(picData);
     return new Pic(picData).save();
   })
   .then(pic => {
-    console.log(pic);
     return pic;
   });
 };
 
 exports.getPic = function(req) {
   debug('#GET /pic/:picID');
-  Pic.findById(req.params.picID)
-    .then(pic => pic);
+  return Pic.findById(req.params.picID)
+    .then(pic => {
+      if(!pic) {
+        return Promise.reject(createError(400, 'INVALID ID'));
+      }
+      return pic;
+    })
+    .catch(err => {
+      return Promise.reject(createError(400, console.error(err)));
+    });
 };
 
 exports.deletePic = function(req) {
-  console.log('YOOOO');
   return Pic.findById(req.params.picID)
     .then(pic => {
       let params = {
@@ -83,8 +87,6 @@ exports.deletePic = function(req) {
         Key: pic.objectKey,
       };
       return Pic.findByIdAndRemove(pic._id)
-      .then(() => {
-        s3DeleteProm(params);
-      });
+      .then(() => s3DeleteProm(params));
     });
 };

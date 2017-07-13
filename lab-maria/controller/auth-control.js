@@ -22,10 +22,12 @@ exports.createUser = function(req) {
 exports.authorize = function(req) {
   return User.findOne({username: req.auth.username})
     .then(user => {
-      if(!user) Promise.reject(createError(401, 'Unauthorized'));
+      if(!user) return Promise.reject(createError(401, 'Unauthorized'));
       return user.comparePasswordHash(req.auth.password);
     })
     .then(user => user.generateToken())
     .then(token => token)
-    .catch(err => Promise.reject(createError(401, err.name)));
+    .catch(err => {
+      return Promise.reject(createError(401, err.name));
+    });
 };

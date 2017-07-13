@@ -35,7 +35,10 @@ userSchema.methods.comparePasswordHash = function(password) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, this.password, (err, valid) => {
       if(err) return reject(createError(401, 'Password invalid'));
-      if(!valid) return reject(createError(401, 'Wrong password'));
+      if(!valid) {
+        console.log('INVALID MOTHERFUCKING PASSWORD');
+        return reject(createError(401, 'Wrong password'));
+      }
 
       resolve(this);
     });

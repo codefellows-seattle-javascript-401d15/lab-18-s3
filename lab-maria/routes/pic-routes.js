@@ -14,10 +14,11 @@ module.exports = function(router) {
 
   router.post('/gallery/:galleryID/pic', bearerAuth, upload.single('image'), (req, res) => {
     debug('#POST pic');
-    console.log('WATTT');
     if(!req) return Promise.reject(createError(400, 'Bad Request'));
     Controller.postPic(req)
-      .then(pic => res.status(201).json(pic))
+      .then(pic => {
+        res.status(201).json(pic);
+      })
       .catch(err => {
         console.log('ERR', err.name);
         res.status(err.status).send(err.name);
@@ -28,7 +29,9 @@ module.exports = function(router) {
     debug('#GET pic');
     if(!req) return Promise.reject(createError(400, 'Bad Request'));
     Controller.getPic(req)
-      .then(pic => res.status(201).json(pic))
+      .then(pic => {
+        res.status(200).json(pic);
+      })
       .catch(err => res.status(err.status).send(err.name));
   });
 

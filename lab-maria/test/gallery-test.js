@@ -11,7 +11,7 @@ mongoose.Promise = Promise;
 
 chai.use(http);
 
-describe.only('Gallery Routes', function() {
+describe('Gallery Routes', function() {
   let testGallery;
   let userToken;
 
